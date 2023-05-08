@@ -11,6 +11,8 @@ public class PlayerMovement : MonoBehaviour
     public LayerMask colliderLayer;
     private Vector3 deplacement;
     private float nextMove = 0;
+    public Rigidbody2D rb;
+
 
     // Update is called once per frame
     void Update()
@@ -32,6 +34,7 @@ public class PlayerMovement : MonoBehaviour
                 x = 0;
             }
         }
+        
         if (!isMoving && ( (x!=0) || (y!=0))) 
         {
             Debug.Log("peubouger");
@@ -44,7 +47,7 @@ public class PlayerMovement : MonoBehaviour
 
         }
 
-        nextMove += Time.deltaTime; //temps réel universel
+        nextMove += Time.deltaTime; 
         if(nextMove > timeToMove) 
         {   
             isMoving= false;
@@ -58,16 +61,18 @@ public class PlayerMovement : MonoBehaviour
     void OnCollisionEnter2D(Collision2D collision) 
     {
         Debug.Log("coll");
-        if(collision.gameObject.tag== "mur")
+        //if (collision.gameObject.tag == "mur")
+        if (collision.gameObject.layer == LayerMask.NameToLayer("colliderLayer")) //ça marche comme ça en mettant le layer(j'ai mis une tilemap mur)
         {
             transform.position = origPos;
         }
-        if(collision.gameObject.tag =="BOUGE")
-        {
-            Debug.Log("colbouge");
-            collision.gameObject.transform.position+=deplacement;
-        }
+        //if (collision.gameObject.tag =="BOUGE")
+        //{
+        //    Debug.Log("colbouge");
+        //    collision.gameObject.transform.position+=deplacement;
+        //}
         
+
         
     }  
     
@@ -75,16 +80,12 @@ public class PlayerMovement : MonoBehaviour
     
     {
         
-        
-         //là où il est
         deplacement = direction;
-        origPos= transform.position;
-        targetPos = origPos + direction; //là où il sera
+        //origPos= transform.position; t'en as déjà mis un dans l'update
+        targetPos = origPos + direction;
         transform.position = targetPos;
-        // while (nextMove < timeToMove) 
-        // {
-        //     nextMove += Time.deltaTime; //temps réel universel
-            yield return null;
+     
+        yield return null;
 
         // } 
 
