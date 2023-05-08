@@ -31,12 +31,11 @@ public class PlayerMovement : MonoBehaviour
                 x = 0;
             }
         }
-        deplacement = new Vector3(x,y,0f);
         if (!isMoving) 
         {
             
             origPos=transform.position;
-            StartCoroutine(MovePlayer(deplacement));
+            StartCoroutine(MovePlayer(new Vector3(x, y, 0f)));
         }
 
 
@@ -63,7 +62,8 @@ public class PlayerMovement : MonoBehaviour
         }
         if(collision.gameObject.tag =="BOUGE")
         {
-            collision.gameObject.Transform.position+=deplacement;
+            Debug.Log("colbouge");
+            collision.gameObject.transform.position+=deplacement;
         }
         
         
@@ -77,6 +77,7 @@ public class PlayerMovement : MonoBehaviour
         float nextMove = 0;
 
          //là où il est
+        deplacement = direction;
         origPos= transform.position;
         targetPos = origPos + direction; //là où il sera
         transform.position = targetPos;
