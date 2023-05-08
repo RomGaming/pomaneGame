@@ -10,6 +10,7 @@ public class PlayerMovement : MonoBehaviour
     public float detectionRadius = 10f;
     public LayerMask colliderLayer;
     private Vector3 deplacement;
+    private float nextMove = 0;
 
     // Update is called once per frame
     void Update()
@@ -33,26 +34,25 @@ public class PlayerMovement : MonoBehaviour
         }
         if (!isMoving) 
         {
-            
+            Debug.Log("peubouger");
             origPos=transform.position;
             StartCoroutine(MovePlayer(new Vector3(x, y, 0f)));
+            nextMove=0;
+            isMoving=true;
+
         }
 
-
-        // transform.position= origPos;
-        // if (Physics2D.OverlapCircle(transform.position, detectionRadius, colliderLayer))
-        //  {
-        //     ;
-            
-        // }
+        nextMove += Time.deltaTime; //temps réel universel
+        if(nextMove > timeToMove) 
+        {   
+            isMoving= false;
+        }
+       
         
     
     }   
      
-        // if (!Physics2D.OverlapCircle(transform.position + new Vector3(x, y, 0f), detectionRadius, colliderLayer))
-        // {
-        //     if (!isMoving) StartCoroutine(MovePlayer(new Vector3(x, y, 0f)));
-        // }
+        
     void OnCollisionEnter2D(Collision2D collision) 
     {
         Debug.Log("coll");
@@ -73,22 +73,21 @@ public class PlayerMovement : MonoBehaviour
     
     {
         
-        isMoving = true;
-        float nextMove = 0;
+        // isMoving = true;
 
          //là où il est
         deplacement = direction;
         origPos= transform.position;
         targetPos = origPos + direction; //là où il sera
         transform.position = targetPos;
-        while (nextMove < timeToMove) //La fonction Lerp utilise trois paramètres, le départ et l'arrivée en vector3 et une valeur entre 0 et 1
-        {
-            nextMove += Time.deltaTime; //temps réel universel
+        // while (nextMove < timeToMove) 
+        // {
+        //     nextMove += Time.deltaTime; //temps réel universel
             yield return null;
 
-        } //recheck la position d'arrivée
+        // } 
 
-        isMoving = false;
+        // isMoving = false;
     }
 
     private void OnDrawGizmos()
