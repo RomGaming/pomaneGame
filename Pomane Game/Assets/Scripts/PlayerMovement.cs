@@ -32,13 +32,15 @@ public class PlayerMovement : MonoBehaviour
                 x = 0;
             }
         }
-        if (!isMoving) 
+        if (!isMoving && ( (x!=0) || (y!=0))) 
         {
             Debug.Log("peubouger");
             origPos=transform.position;
             StartCoroutine(MovePlayer(new Vector3(x, y, 0f)));
+            isMoving = true;
             nextMove=0;
-            isMoving=true;
+           
+            
 
         }
 
@@ -73,8 +75,7 @@ public class PlayerMovement : MonoBehaviour
     
     {
         
-        // isMoving = true;
-
+        
          //là où il est
         deplacement = direction;
         origPos= transform.position;

@@ -298,7 +298,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: efb73cfbb4c90384fbf530230675ead0, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  timeToMove: 0.5
+  timeToMove: 0.15
   detectionRadius: 0.4
   colliderLayer:
     serializedVersion: 2
