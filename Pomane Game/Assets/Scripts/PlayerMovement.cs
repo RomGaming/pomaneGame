@@ -6,18 +6,19 @@ public class PlayerMovement : MonoBehaviour
 {
     private bool isMoving;
     private Vector3 origPos, targetPos;
-    public float timeToMove = 0.15f; //vitesse déplacement
+    public float timeToMove = 0.15f; //vitesse dÃ©placement
     public float detectionRadius = 10f;
     public LayerMask colliderLayer;
+    private Vector3 deplacement;
 
     // Update is called once per frame
     void Update()
     {
-
+        
         float x = Input.GetAxisRaw("Horizontal");
         float y = Input.GetAxisRaw("Vertical");
 
-        //Vérifie que le joueur ne va pas en diago
+        //VÃ©rifie que le joueur ne va pas en diago
         if (x != 0 && y != 0)
         {
 
@@ -30,42 +31,71 @@ public class PlayerMovement : MonoBehaviour
                 x = 0;
             }
         }
-
-        if (!isMoving) StartCoroutine(MovePlayer(new Vector3(x, y, 0f)));
-
-        //if (!Physics2D.OverlapCircle(transform.position + new Vector3(x, y, 0f), detectionRadius, colliderLayer))
-        //{
+        deplacement = new Vector3(x,y,0f);
+        if (!isMoving) 
+        {
             
-        //}
-    }
+            origPos=transform.position;
+            StartCoroutine(MovePlayer(deplacement));
+        }
 
-    //void OnCollisionEnter2D(Collision2D truc)
-    //{
-    //    if (truc.gameObject.tag == "Collision")
-    //    {
-    //        isMoving = false;
-    //    }
-    //}
 
-    private IEnumerator MovePlayer(Vector3 direction)
+        // transform.position= origPos;
+        // if (Physics2D.OverlapCircle(transform.position, detectionRadius, colliderLayer))
+        //  {
+        //     ;
+            
+        // }
+        
+    
+    }   
+     
+        // if (!Physics2D.OverlapCircle(transform.position + new Vector3(x, y, 0f), detectionRadius, colliderLayer))
+        // {
+        //     if (!isMoving) StartCoroutine(MovePlayer(new Vector3(x, y, 0f)));
+        // }
+    void OnCollisionEnter2D(Collision2D collision) 
     {
+        Debug.Log("coll");
+        if(collision.gameObject.tag== "mur")
+        {
+            transform.position = origPos;
+        }
+        if(collision.gameObject.tag =="BOUGE")
+        {
+            collision.gameObject.Transform.position+=deplacement;
+        }
+        
+        
+    }  
+    
+    private IEnumerator MovePlayer(Vector3 direction)
+    
+    {
+        
         isMoving = true;
         float nextMove = 0;
 
-        origPos = transform.position; //là où il est
-        targetPos = origPos + direction; //là où il sera
-
-        while (nextMove < timeToMove) //La fonction Lerp utilise trois paramètres, le départ et l'arrivée en vector3 et une valeur entre 0 et 1
+         //lÃ  oÃ¹ il est
+        origPos= transform.position;
+        targetPos = origPos + direction; //lÃ  oÃ¹ il sera
+        transform.position = targetPos;
+        while (nextMove < timeToMove) //La fonction Lerp utilise trois paramÃ¨tres, le dÃ©part et l'arrivÃ©e en vector3 et une valeur entre 0 et 1
         {
-            transform.position = targetPos;   //Lerp(origPos, targetPos, nextMove / timeToMove);
-            nextMove += Time.deltaTime; //temps réel universel
+            nextMove += Time.deltaTime; //temps rÃ©el universel
             yield return null;
 
-        }
-
-        transform.position = targetPos; //recheck la position d'arrivée
+        } //recheck la position d'arrivÃ©e
 
         isMoving = false;
     }
+
+    private void OnDrawGizmos()
+    {
+        Gizmos.color = Color.yellow;
+        Gizmos.DrawWireSphere(transform.position, detectionRadius);
+    }
+    
 }
+
 
